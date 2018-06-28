@@ -1,0 +1,28 @@
+{
+  "name": "veine",
+  "version": "1.0.0",
+  "description": "A data visualizer for my health data.",
+  "main": "index.js",
+  "scripts": {
+    "start": "webpack-dev-server index.js"
+  },
+  "repository": "https://github.com/jkallioniemi/veine",
+  "author": "Juuso Kallioniemi",
+  "license": "MIT",
+  "private": false,
+  "dependencies": {
+    "react": "^16.4.1",
+    "react-dom": "^16.4.1",
+    "react-vis": "^1.10.0"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.0.0-beta.51",
+    "@babel/preset-react": "^7.0.0-beta.51",
+    "babel-loader": "^8.0.0-beta",
+    "eslint": "^5.0.1",
+    "eslint-plugin-react": "^7.10.0",
+    "webpack": "^4.13.0",
+    "webpack-cli": "^3.0.8",
+    "webpack-dev-server": "^3.1.4"
+  }
+}
