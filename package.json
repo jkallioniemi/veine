@@ -11,9 +11,11 @@
   "license": "MIT",
   "private": false,
   "dependencies": {
+    "css-loader": "^0.28.11",
     "react": "^16.4.1",
     "react-dom": "^16.4.1",
-    "react-vis": "^1.10.0"
+    "react-vis": "^1.10.0",
+    "style-loader": "^0.21.0"
   },
   "devDependencies": {
     "@babel/core": "^7.0.0-beta.51",
