@@ -19,6 +19,10 @@ const config = {
           'style-loader',
           'css-loader',
         ]
+      },
+      {
+        test: /\.csv$/,
+        loader: 'raw-loader'
       }
     ],
   },
