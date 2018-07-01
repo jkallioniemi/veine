@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import Chart from './components/chart';
 import myData from '../bpdata.csv';
-import { __, pick, map, curry, reduce, assoc, keys, addIndex } from 'ramda';
+import { __, pick, map, curry, reduce, assoc, keys, addIndex, filter } from 'ramda';
 import parse from 'csv-parse/lib/sync';
 
 let csvData = parse(myData, { columns: true });
@@ -15,9 +15,10 @@ const getTimeAndColumn = (column) => {
   const renames = { Time: 'x' };
   renames[column] = 'y';
   data = map(renameKeys(renames), data);
-  data = addIndex(map)((val, idx) => {
-    val.x = idx;
-    return val;
+  data = filter((x) => x.x !== '', data);
+  data = map((x) => {
+    x.x = new Date(x.x);
+    return x;
   }, data);
   data = map((item) => {
     item.y = parseInt(item.y);
@@ -33,6 +34,7 @@ let DATA = [
 
 class App extends Component {
   render() {
+    console.log(DATA);
     return (
       <Chart height={600} width={900} data={DATA}/>
     );

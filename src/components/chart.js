@@ -47,7 +47,8 @@ class Chart extends Component {
         <XYPlot
           onMouseLeave={this._onMouseLeave}
           height={height}
-          width={width}>
+          width={width}
+          xType={'time'}>
           <VerticalGridLines/>
           <HorizontalGridLines/>
           <XAxis/>
@@ -56,7 +57,20 @@ class Chart extends Component {
             onNearestX={this._onNearestX}
             data={this.state.data[0]} />
           <LineSeries data={this.state.data[1]} />
-          <Crosshair values={this.state.crosshairValues} className={'test-class-name'} />
+          {this.state.crosshairValues.length > 0 ? (
+            <Crosshair values={this.state.crosshairValues} className={'test-class-name'}>
+              <table className='table table-condensed' style={{ backgroundColor: '#000000' }}>
+                <tr>
+                  <td>Sys</td>
+                  <td>{this.state.crosshairValues[0].y}</td>
+                </tr>
+                <tr>
+                  <td>Dia</td>
+                  <td>{this.state.crosshairValues[1].y}</td>
+                </tr>
+              </table>
+            </Crosshair>
+          ) : null }
         </XYPlot>
       </div>
     );
