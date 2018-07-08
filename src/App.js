@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import Chart from './components/chart';
+import DataControls from './components/dataControls';
 import myData from '../bpdata.csv';
 import { __, pick, map, curry, reduce, assoc, keys, addIndex, filter, splitEvery, mean } from 'ramda';
 import parse from 'csv-parse/lib/sync';
@@ -26,7 +27,6 @@ const getTimeAndColumn = (column) => {
   const renames = { Time: 'x' };
   renames[column] = 'y';
   data = map(renameKeys(renames), data);
-  data = filter((x) => x.x !== '', data);
   data = map((x) => {
     x.x = new Date(x.x);
     return x;
@@ -43,11 +43,51 @@ let DATA = [
   getTimeAndColumn('Diastolic')
 ];
 
+const filterBasedOnHours = curry((min, max, item) => {
+  const hours = item.x.getUTCHours();
+  return hours >= min && hours <= max;
+});
+
 class App extends Component {
+  constructor() {
+    super();
+    this.state = {
+      morningsOnly: true,
+      eveningsOnly: false
+    };
+
+    this.handleFilterChange = this.handleFilterChange.bind(this);
+    this.filterData = this.filterData.bind(this);
+  }
+
+  handleFilterChange(name, value) {
+    this.setState({
+      ...this.state,
+      [name]: value
+    });
+  }
+
+  filterData(data) {
+    if (this.state.morningsOnly) {
+      const filterMorning = filterBasedOnHours(1, 8);
+      return [filter(filterMorning, data[0]), filter(filterMorning, data[1])];
+    }
+
+    if (this.state.eveningsOnly) {
+      const filterEvening = filterBasedOnHours(14, 23);
+      return [filter(filterEvening, data[0]), filter(filterEvening, data[1])];
+    }
+
+    return data;
+  }
+
   render() {
-    console.log(DATA);
+    const data = this.filterData(DATA);
     return (
-      <Chart height={600} width={900} data={DATA}/>
+      <div>
+        <Chart height={600} width={900} data={data}/>
+        <DataControls onFilterChange={this.handleFilterChange} />
+      </div>
     );
   }
 }

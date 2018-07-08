@@ -17,7 +17,6 @@ class Chart extends Component {
   constructor(props) {
     super();
     this.state = {
-      data: props.data,
       crosshairValues: []
     };
 
@@ -29,7 +28,7 @@ class Chart extends Component {
   }
 
   _onNearestX(value, { index }) {
-    this.setState({ ...this.state, crosshairValues: this.state.data.map(d => d[index]) });
+    this.setState({ ...this.state, crosshairValues: this.props.data.map(d => d[index]) });
   }
 
   _onMouseLeave() {
@@ -37,7 +36,6 @@ class Chart extends Component {
   }
 
   render() {
-
     return (
       <div className='app' style={{
         'margin-left': 'auto',
@@ -55,8 +53,8 @@ class Chart extends Component {
           <YAxis/>
           <LineSeries
             onNearestX={this._onNearestX}
-            data={this.state.data[0]} />
-          <LineSeries data={this.state.data[1]} />
+            data={this.props.data[0]} />
+          <LineSeries data={this.props.data[1]} />
           {this.state.crosshairValues.length > 0 ? (
             <Crosshair values={this.state.crosshairValues} className={'test-class-name'}>
               <table className='table table-condensed' style={{ backgroundColor: '#000000' }}>
