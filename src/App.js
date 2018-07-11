@@ -5,36 +5,31 @@ import myData from '../bpdata.csv';
 import { __, pick, map, curry, reduce, assoc, keys, addIndex, filter, splitEvery, mean } from 'ramda';
 import parse from 'csv-parse/lib/sync';
 
-const TIME_COLUMN_NAME = 'Time';
-
 let csvData = parse(myData, { columns: true });
 
 const renameKeys = curry((keysMap, obj) =>
   reduce((acc, key) => assoc(keysMap[key] || key, obj[key], acc), {}, keys(obj))
 );
 
-const averageTwoElements = curry((column, item) =>
-  ({
-    [TIME_COLUMN_NAME]: item[0][TIME_COLUMN_NAME],
-    [column]: mean([item[0][column], item[1][column]])
-  })
-);
+const averageTwoElements = (item) => ({
+  x: item[0].x,
+  y: mean([item[0].y, item[1].y])
+});
 
 const getTimeAndColumn = (column) => {
   let data = map(pick(['Time', column]), csvData);
-  data = splitEvery(2, data);
-  data = map(averageTwoElements(column), data);
   const renames = { Time: 'x' };
   renames[column] = 'y';
   data = map(renameKeys(renames), data);
   data = map((x) => {
-    x.x = new Date(x.x);
+    x.x = x ? new Date(x.x) : x.x;
     return x;
   }, data);
   data = map((item) => {
     item.y = parseInt(item.y);
     return item;
   }, data);
+  data = splitEvery(2, data);
   return data;
 };
 
@@ -68,6 +63,9 @@ class App extends Component {
   }
 
   filterData(data) {
+    data[0] = map(averageTwoElements, data[0]);
+    data[1] = map(averageTwoElements, data[1]);
+
     if (this.state.morningsOnly) {
       const filterMorning = filterBasedOnHours(1, 8);
       return [filter(filterMorning, data[0]), filter(filterMorning, data[1])];
