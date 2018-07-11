@@ -57,7 +57,7 @@ class Chart extends Component {
           <LineSeries data={this.props.data[1]} />
           {this.state.crosshairValues.length > 0 ? (
             <Crosshair values={this.state.crosshairValues} className={'test-class-name'}>
-              <table className='table table-condensed' style={{ backgroundColor: '#000000' }}>
+              <table className='table table-condensed' style={{ backgroundColor: '#282828' }}>
                 <tr>
                   <td>Sys</td>
                   <td>{this.state.crosshairValues[0].y}</td>
