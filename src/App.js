@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import Chart from './components/chart';
 import DataControls from './components/dataControls';
 import myData from '../bpdata.csv';
-import { __, pick, map, curry, reduce, assoc, keys, addIndex, filter, splitEvery, mean } from 'ramda';
+import { __, pick, map, curry, reduce, assoc, keys, addIndex, filter, splitEvery, mean, clone } from 'ramda';
 import parse from 'csv-parse/lib/sync';
 
 let csvData = parse(myData, { columns: true });
@@ -80,7 +80,7 @@ class App extends Component {
   }
 
   render() {
-    const data = this.filterData(DATA);
+    const data = this.filterData(clone(DATA));
     return (
       <div>
         <Chart height={600} width={900} data={data}/>
