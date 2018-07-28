@@ -46,7 +46,9 @@ class Chart extends Component {
           onMouseLeave={this._onMouseLeave}
           height={height}
           width={width}
-          xType={'time'}>
+          xType={'time'}
+          yDomain={[40, 170]}
+        >
           <VerticalGridLines/>
           <HorizontalGridLines/>
           <XAxis/>

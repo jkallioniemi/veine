@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import Chart from './components/chart';
 import DataControls from './components/dataControls';
 import myData from '../bpdata.csv';
-import { __, pick, map, curry, reduce, assoc, keys, addIndex, filter, splitEvery, mean, clone } from 'ramda';
+import { __, pick, map, curry, reduce, assoc, keys, addIndex, filter, splitEvery, mean, clone, max, min } from 'ramda';
 import parse from 'csv-parse/lib/sync';
 
 let csvData = parse(myData, { columns: true });
@@ -15,6 +15,26 @@ const averageTwoElements = (item) => ({
   x: item[0].x,
   y: mean([item[0].y, item[1].y])
 });
+
+const pickHighest = (item) => ({
+  x: item[0].x,
+  y: max(item[0].y, item[1].y)
+});
+
+const pickLowest = (item) => ({
+  x: item[0].x,
+  y: min(item[0].y, item[1].y)
+});
+
+const copyX = (item) => ([
+  { ...item[0] },
+  { x: item[0].x, y: item[1].y }
+]);
+
+const takeNth = curry((n, item) => ({
+  x: item[n].x,
+  y: item[n].y,
+}));
 
 const getTimeAndColumn = (column) => {
   let data = map(pick(['Time', column]), csvData);
@@ -48,7 +68,10 @@ class App extends Component {
     super();
     this.state = {
       morningsOnly: true,
-      eveningsOnly: false
+      eveningsOnly: false,
+      pickHighest: false,
+      pickLowest: false,
+      averageMeasurements: true
     };
 
     this.handleFilterChange = this.handleFilterChange.bind(this);
@@ -63,8 +86,28 @@ class App extends Component {
   }
 
   filterData(data) {
-    data[0] = map(averageTwoElements, data[0]);
-    data[1] = map(averageTwoElements, data[1]);
+    let massageFn;
+
+    if (this.state.averageMeasurements) {
+      massageFn = averageTwoElements;
+    } else if (this.state.pickHighest) {
+      massageFn = pickHighest;
+    } else if (this.state.pickLowest) {
+      massageFn = pickLowest;
+    }
+
+    if (massageFn) {
+      data[0] = map(massageFn, data[0]);
+      data[1] = map(massageFn, data[1]);
+    } else {
+      data[0] = map(copyX, data[0]);
+      data[1] = map(copyX, data[1]);
+      const newData = [map(takeNth(0), data[0])];
+      newData.push(map(takeNth(1), data[0]));
+      newData.push(map(takeNth(0), data[1]));
+      newData.push(map(takeNth(1), data[1]));
+      data = newData;
+    }
 
     if (this.state.morningsOnly) {
       const filterMorning = filterBasedOnHours(1, 8);
