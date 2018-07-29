@@ -35,7 +35,8 @@ class DataControls extends Component {
           name="morningsOnly"
           type="button"
           value={this.state.morningsOnly}
-          onClick={this.handleInputChange}>
+          onClick={this.handleInputChange}
+        >
           Mornings
         </button>
         <button
@@ -43,7 +44,8 @@ class DataControls extends Component {
           name="eveningsOnly"
           type="button"
           value={this.state.eveningsOnly}
-          onClick={this.handleInputChange}>
+          onClick={this.handleInputChange}
+        >
           Evenings
         </button>
         <button
@@ -51,7 +53,8 @@ class DataControls extends Component {
           name="averageMeasurements"
           type="button"
           value={this.state.averageMeasurements}
-          onClick={this.handleInputChange}>
+          onClick={this.handleInputChange}
+        >
           Average
         </button>
         <button
@@ -59,7 +62,8 @@ class DataControls extends Component {
           name="pickHighest"
           type="button"
           value={this.state.pickHighest}
-          onClick={this.handleInputChange}>
+          onClick={this.handleInputChange}
+        >
           Pick highest
         </button>
         <button
@@ -67,7 +71,8 @@ class DataControls extends Component {
           name="pickLowest"
           type="button"
           value={this.state.pickLowest}
-          onClick={this.handleInputChange}>
+          onClick={this.handleInputChange}
+        >
           Pick lowest
         </button>
       </div>

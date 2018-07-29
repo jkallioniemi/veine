@@ -55,11 +55,18 @@ class Chart extends Component {
           <YAxis/>
           <LineSeries
             onNearestX={this._onNearestX}
-            data={this.props.data[0]} />
+            data={this.props.data[0]}
+          />
           <LineSeries data={this.props.data[1]} />
           {this.state.crosshairValues.length > 0 ? (
-            <Crosshair values={this.state.crosshairValues} className="test-class-name">
-              <table className="table table-condensed" style={{ backgroundColor: '#282828' }}>
+            <Crosshair
+              values={this.state.crosshairValues}
+              className="test-class-name"
+            >
+              <table
+                className="table table-condensed"
+                style={{ backgroundColor: '#282828' }}
+              >
                 <tr>
                   <td>Sys</td>
                   <td>{this.state.crosshairValues[0].y}</td>
