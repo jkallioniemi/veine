@@ -37,7 +37,7 @@ class Chart extends Component {
 
   render() {
     return (
-      <div className='app' style={{
+      <div className="app" style={{
         'margin-left': 'auto',
         'margin-right': 'auto',
         'width': width
@@ -58,8 +58,8 @@ class Chart extends Component {
             data={this.props.data[0]} />
           <LineSeries data={this.props.data[1]} />
           {this.state.crosshairValues.length > 0 ? (
-            <Crosshair values={this.state.crosshairValues} className={'test-class-name'}>
-              <table className='table table-condensed' style={{ backgroundColor: '#282828' }}>
+            <Crosshair values={this.state.crosshairValues} className="test-class-name">
+              <table className="table table-condensed" style={{ backgroundColor: '#282828' }}>
                 <tr>
                   <td>Sys</td>
                   <td>{this.state.crosshairValues[0].y}</td>
