@@ -80,7 +80,7 @@ class App extends Component {
     const data = this.filterData(clone(DATA));
     return (
       <div>
-        <Chart height={600} width={900} data={data}/>
+        <Chart height={600} width={900} data={data} />
         <DataControls onFilterChange={this.handleFilterChange} />
       </div>
     );
