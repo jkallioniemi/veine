@@ -1,67 +1,21 @@
 import React, { Component } from 'react';
+import parse from 'csv-parse/lib/sync';
 import Chart from './components/chart';
 import DataControls from './components/dataControls';
 import myData from '../bpdata.csv';
-import { __, pick, map, curry, reduce, assoc, keys, addIndex, filter, splitEvery, mean, clone, max, min } from 'ramda';
-import parse from 'csv-parse/lib/sync';
+import { map, addIndex, filter, clone } from 'ramda';
+import {
+  averageTwoElements, pickHighest, pickLowest,
+  takeNth, copyX
+} from './utils/dataMassage';
+import { getTimeAndColumn } from './utils/dataLoad';
+import { filterBasedOnHours } from './utils/dataFilter';
 
 let csvData = parse(myData, { columns: true });
-
-const renameKeys = curry((keysMap, obj) =>
-  reduce((acc, key) => assoc(keysMap[key] || key, obj[key], acc), {}, keys(obj))
-);
-
-const averageTwoElements = (item) => ({
-  x: item[0].x,
-  y: mean([item[0].y, item[1].y])
-});
-
-const pickHighest = (item) => ({
-  x: item[0].x,
-  y: max(item[0].y, item[1].y)
-});
-
-const pickLowest = (item) => ({
-  x: item[0].x,
-  y: min(item[0].y, item[1].y)
-});
-
-const copyX = (item) => ([
-  { ...item[0] },
-  { x: item[0].x, y: item[1].y }
-]);
-
-const takeNth = curry((n, item) => ({
-  x: item[n].x,
-  y: item[n].y,
-}));
-
-const getTimeAndColumn = (column) => {
-  let data = map(pick(['Time', column]), csvData);
-  const renames = { Time: 'x' };
-  renames[column] = 'y';
-  data = map(renameKeys(renames), data);
-  data = map((x) => {
-    x.x = x ? new Date(x.x) : x.x;
-    return x;
-  }, data);
-  data = map((item) => {
-    item.y = parseInt(item.y);
-    return item;
-  }, data);
-  data = splitEvery(2, data);
-  return data;
-};
-
 let DATA = [
-  getTimeAndColumn('Systolic'),
-  getTimeAndColumn('Diastolic')
+  getTimeAndColumn(csvData, 'Systolic'),
+  getTimeAndColumn(csvData, 'Diastolic')
 ];
-
-const filterBasedOnHours = curry((min, max, item) => {
-  const hours = item.x.getUTCHours();
-  return hours >= min && hours <= max;
-});
 
 class App extends Component {
   constructor() {
